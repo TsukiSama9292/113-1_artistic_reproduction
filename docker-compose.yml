@@ -1,0 +1,20 @@
+services:
+  stabel_diffusion_webui:
+    build:
+      dockerfile: ./Dockerfile
+    container_name: stabel_diffusion_webui
+    volumes:
+      - ./image:/stable-diffusion-webui/outputs
+    ports:
+      - "61000:80" # gradio
+    tty: true
+    stdin_open: true 
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: "all"
+            capabilities: [gpu]
+    command: ["./webui.sh", "--server-name", "0.0.0.0", "--port", "80"]
+    restart: unless-stopped
